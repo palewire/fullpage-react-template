@@ -18,21 +18,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Load .env file
         uses: xom9ikk/dotenv@v2
 
-      - name: Use Node.js 14.x
-        uses: actions/setup-node@v2
+      - name: Use Node.js 16.x
+        uses: actions/setup-node@v3
         with:
-          node-version: 14
+          node-version: 16
 
       - name: Use npm v7
         run: npm install --global npm@7
 
       - name: Cache node modules
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/.npm # npm cache files are stored in `~/.npm` on Linux/macOS
           key: ${{ runner.os }}-build-${{ hashFiles('**/package-lock.json') }}
@@ -44,7 +44,7 @@ jobs:
         run: npm ci --production
 
       - name: Prepare the Delivery path prefix
-        uses: actions/github-script@v3
+        uses: actions/github-script@v6
         id: delivery-path-prefix
         with:
           result-encoding: string
