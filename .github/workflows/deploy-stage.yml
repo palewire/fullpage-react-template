@@ -32,7 +32,7 @@ jobs:
 
       - id: slack
         name: Create Slack notification
-        uses: datadesk/notify-slack-on-build@v2
+        uses: datadesk/notify-slack-on-build@main
         with:
           slack-token: ${{ secrets.BAKER_BOT_SLACK_TOKEN }}
           channel-name: ${{ secrets.BAKER_BOT_SLACK_CHANNEL_NAME }}
@@ -54,7 +54,7 @@ jobs:
 
       - name: Update Slack notification (success)
         if: success()
-        uses: datadesk/notify-slack-on-build@v2
+        uses: datadesk/notify-slack-on-build@main
         with:
           slack-token: ${{ secrets.BAKER_BOT_SLACK_TOKEN }}
           channel-id: ${{ steps.slack.outputs.channel-id }}
@@ -64,7 +64,7 @@ jobs:
 
       - name: Update Slack notification (failure)
         if: failure()
-        uses: datadesk/notify-slack-on-build@v2
+        uses: datadesk/notify-slack-on-build@main
         with:
           slack-token: ${{ secrets.BAKER_BOT_SLACK_TOKEN }}
           channel-id: ${{ steps.slack.outputs.channel-id }}
