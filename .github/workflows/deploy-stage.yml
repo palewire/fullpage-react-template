@@ -30,6 +30,15 @@ jobs:
           node-version: 16
           cache: "npm"
 
+      - id: slack
+        name: Create Slack notification
+        uses: datadesk/notify-slack-on-build@v2
+        with:
+          slack-token: ${{ secrets.BAKER_BOT_SLACK_TOKEN }}
+          channel-name: ${{ secrets.BAKER_BOT_SLACK_CHANNEL_NAME }}
+          status: in_progress
+          url: https://yourdomain.com/your-slug/
+
       - name: npm install
         run: npm ci --production
 
@@ -42,6 +51,26 @@ jobs:
           name: build
           path: ./build
           if-no-files-found: error
+
+      - name: Update Slack notification (success)
+        if: success()
+        uses: datadesk/notify-slack-on-build@v2
+        with:
+          slack-token: ${{ secrets.BAKER_BOT_SLACK_TOKEN }}
+          channel-id: ${{ steps.slack.outputs.channel-id }}
+          status: success
+          url: https://yourdomain.com/your-slug/
+          message-id: ${{ steps.slack.outputs.message-id }}
+
+      - name: Update Slack notification (failure)
+        if: failure()
+        uses: datadesk/notify-slack-on-build@v2
+        with:
+          slack-token: ${{ secrets.BAKER_BOT_SLACK_TOKEN }}
+          channel-id: ${{ steps.slack.outputs.channel-id }}
+          status: failure
+          url: https://yourdomain.com/your-slug/
+          message-id: ${{ steps.slack.outputs.message-id }}
 
   validate-hyperlinks:
     runs-on: ubuntu-latest
